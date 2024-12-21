@@ -82,3 +82,24 @@ if __name__ == "__main__":
     plt.xlabel("消费金额（元）")
     plt.savefig("result.png")
     plt.show()
+    keys_in_detail = all_data.keys()
+    keys_in_breif = list(set([key.split('_')[0] for key in keys_in_detail]))
+    all_data_brief = {}
+    for i in range(len(keys_in_breif)):
+        all_data_brief[keys_in_breif[i]] = round(sum([all_data[key] for key in keys_in_detail if key.startswith(keys_in_breif[i])]), 2)
+    all_data_brief = dict(sorted(all_data_brief.items(), key=lambda x: x[1], reverse=False))
+
+    plt.rcParams['font.sans-serif'] = ['SimHei']
+    plt.figure(figsize=(12, len(all_data_brief) / 66 * 18))
+    plt.barh(list(all_data_brief.keys()), list(all_data_brief.values()))
+    for index, value in enumerate(list(all_data_brief.values())):
+        plt.text(value + 0.01 * max(all_data_brief.values()),
+                index,
+                str(value),
+                va='center')
+    plt.xlim(0, 1.2 * max(all_data_brief.values()))
+    plt.title("华清大学食堂消费情况")
+    plt.xlabel("消费金额（元）")
+    plt.savefig("result_brief.png")
+    plt.tight_layout()
+    plt.show()
